@@ -1,0 +1,21 @@
+/* App.css or global CSS file */
+.datepicker-wrapper .react-datepicker-wrapper {
+    /* Set the desired height here */
+    height: 100rem; /* For example, adjust the height value as needed */
+  }
+  
+  .datepicker-wrapper .react-datepicker__input-container input {
+    /* Match the input height to the wrapper height and center the text vertically */
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+
+.react-datepicker-time__header {
+font-size: 0.944em;
+}
+
+.react-datepicker__navigation--next--with-time {
+right: 80px;
+}
