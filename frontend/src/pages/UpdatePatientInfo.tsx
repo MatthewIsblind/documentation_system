@@ -65,16 +65,19 @@ const UpdatePatientInfo: React.FC = () => {
         
             console.log('Form submitted:', data);
             console.log('Response from server:', response.data);
-    
+             // Show the response in a pop-up message
+            window.alert('Patient created successfully!'); // You can customize the message as needed
         // If you want to redirect or show a success message to the user, you can do it here
         } catch (error) {
             console.error('Error submitting form:', error);
+            window.alert('An error occurred while submitting the form. Please try again later.');
         // Handle any errors that occur during the request
         }
 
 
     } else {
-    console.log('Form contains errors. Please fill in all required fields.');
+        console.log('Form contains errors. Please fill in all required fields.');
+        window.alert('Please fill in all required fields.');
     }
   };
   
