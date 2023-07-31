@@ -19,7 +19,14 @@ def create_patient():
     return jsonify({"message": "Patient created successfully", "patient_id": str(patient_id)})
 
 
+@app.route('/api/get_patients', methods=['GET'])
+def get_patients():
+    # Fetch all patient records from the "patient" collection
+    patients = list(mongo.db.patients.find({}, {"_id": 0}))  # Exclude "_id" field from the response
+    
+    return jsonify({"data": patients})
+
 if __name__ == '__main__':
     app.run(debug=True)
 
-# venv\Scripts\activate to activate the server
+# venv\Scripts\activate to activate the server python server.py to run it
