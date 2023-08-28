@@ -10,6 +10,7 @@ const navigation = [
   { name: 'handOver', to: '/handOver' },
   { name: 'login', to: '/login' },
   { name: 'UpdatePatientInfo', to: '/UpdatePatientInfo' },
+  { name: 'CheckList', to: '/CheckList' },
 ];
 
 function classNames(...classes) {
