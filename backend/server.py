@@ -29,4 +29,5 @@ def get_patients():
 if __name__ == '__main__':
     app.run(debug=True)
 
-# venv\Scripts\activate to activate the server python server.py to run it
+# venv\Scripts\activate to activate the server 
+# python  server.py to run it
