@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns'; // Import the format function
+import AddTaskButton from './AddTaskutton';
+
 
 
 interface Task {
@@ -19,6 +21,20 @@ interface PatientInfo {
 
 
 export default function CheckList() {
+
+    //pop up stuff
+    const [modal,setModal] = useState(false);
+
+    const toggleModal = () => {
+        setModal(!modal)
+    }
+
+
+    // Function to close the modal
+    const closeModal = () => {
+        setModal(false);
+    };
+  
 
     const patientTaskList: { [key: string]: Task[] } = {
         "01/08/2023": [
@@ -52,10 +68,11 @@ export default function CheckList() {
     
         
     const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const firstName = searchParams.get('firstName');
-    const lastName = searchParams.get('lastName');
+    // const searchParams = new URLSearchParams(location.search);
+    // const firstName = searchParams.get('firstName');
+    // const lastName = searchParams.get('lastName');
 
+    const { firstName, lastName } = location.state as { firstName: string; lastName: string };
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [tasksToShow, setTasksToShow] = useState<Task[]>([]); // State for tasksToShow
 
@@ -116,6 +133,23 @@ export default function CheckList() {
                         dateFormat="dd/MM/yyyy"
                         className="border border-gray-300 p-2 rounded-md w-full"
                     />
+                </div>
+
+                <div>
+                    <button
+                    className="bg-white border-black border px-10 py-2 rounded"
+                    onClick={toggleModal}
+                    >
+                    + Press here to add task
+                    </button>
+                    {modal && (
+                    <AddTaskButton
+                        firstName={firstName}
+                        lastName={lastName}
+                        selectedDate  = {selectedDateFormat}
+                        onClose={closeModal} // Pass the onClose function to component B
+                    />
+                    )}
                 </div>
                 
                 <div className="mt-8 flow-root">

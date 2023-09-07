@@ -146,7 +146,11 @@ const Home: React.FC = () => {
                         <span className="sr-only">, {patient.patientFirstName}</span>
                       </a>
                       <Link
-                        to={`/checklist?firstName=${patient.patientFirstName}&lastName=${patient.patientLastName}`}
+                        to={`/checklist`}
+                        state={{
+                          firstName: patient.patientFirstName,
+                          lastName: patient.patientLastName,
+                        }}
                         className="text-green-600 hover:text-green-900 px-3"
                       >
                         Check Task List
