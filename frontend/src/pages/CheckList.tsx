@@ -118,10 +118,10 @@ export default function CheckList() {
         return (
             <div className="container mx-auto p-4">
                 <h1 className="text-3xl font-bold mb-2">
-                    Patient: {patientInfo.name}
+                    Patient: {firstName} {lastName}
 
                 </h1>
-                <h2 className="text-xl font-bold mb-4">
+                <h2 className="text-3xl font-bold mb-4">
                     Checklist for {firstName} {lastName}
                 </h2>
                 
@@ -217,7 +217,7 @@ export default function CheckList() {
         return (
             <div className="container mx-auto p-4">
                 <h1 className="text-3xl font-bold mb-2">
-                    Patient: {patientInfo.name}
+                    Patient: {firstName} {lastName}
                     
                 </h1>
                 <h1 className="text-3xl font-bold mb-4">
@@ -232,6 +232,26 @@ export default function CheckList() {
                         className="border border-gray-300 p-2 rounded-md w-full"
                     />
                 </div>
+
+                <div>
+                    <button
+                    className="bg-white border-black border px-10 py-2 rounded"
+                    onClick={toggleModal}
+                    >
+                    + Press here to add task
+                    </button>
+                    {modal && (
+                    <AddTaskButton
+                        firstName={firstName}
+                        lastName={lastName}
+                        selectedDate  = {selectedDateFormat}
+                        onClose={closeModal} // Pass the onClose function to component B
+                    />
+                    )}
+                </div>
+
+
+
             </div>
         );
     }

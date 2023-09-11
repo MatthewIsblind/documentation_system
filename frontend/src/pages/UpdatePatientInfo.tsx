@@ -60,7 +60,7 @@ const UpdatePatientInfo: React.FC = () => {
 
         try {
             // Make a POST request to your Flask backend API
-            const response = await axios.post('http://localhost:5000/api/patients', data);
+            const response = await axios.post('http://localhost:5000/api/generate_patients', data);
 
         
             console.log('Form submitted:', data);
