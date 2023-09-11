@@ -5,11 +5,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns'; // Import the format function
 import TimePicker from 'react-time-picker';
 import { useForm, Controller } from 'react-hook-form';
+import axios from 'axios';
+
 
 interface Props {
     firstName: String;
     lastName : String;
     selectedDate : String;
+    taskListSize: Number;
     onClose: () => void; // Define the onClose prop as a function
 }
 
@@ -34,8 +37,17 @@ const defaultFormData: FormData = {
 };
 
 
+interface Task {
+    id: Number;
+    time: string;
+    task: string;
+    completed: boolean;
+}
+
+
+
 // Separate component for adding a new task
-const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate  ,onClose}) => {
+const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskListSize ,onClose}) => {
     const handleClose = () => {
         onClose(); // Call the onClose function passed from component A
     };
@@ -51,10 +63,51 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate  ,onCl
 
     const onSubmit = async(data: FormData) => {
       // Handle form submission here
-      data.firstName = firstName;
-      data.lastName = lastName;
-      data.date = selectedDate;
-      console.log(data);
+        data.firstName = firstName;
+        data.lastName = lastName;
+        data.date = selectedDate;
+        const formattedTime = `${data.hour}:${data.minute}`; // Combine hour, minute
+        console.log(data);
+
+          // Create a new task object
+        const newTask = {
+            id: taskListSize.valueOf() + 1, 
+            time: formattedTime,
+            task: data.task,
+            completed: false, // Initialize as false since it's a new task
+        };
+
+
+        const requestBody = {
+            patientName: `${firstName} ${lastName}`, // Combine first and last name
+            taskDate :selectedDate,
+            taskData: newTask,
+        };
+
+
+        console.log(requestBody)
+
+
+        try {
+            // Make a POST request to your backend API
+            const response = await axios.post('http://localhost:5000/api/add_task', requestBody);
+            
+            if (response.status === 200) {
+              // Task added successfully on the server
+              // You can update your client-side task list if needed
+              console.log('Task added successfully:', response.data);
+            } else {
+              // Handle errors, e.g., display an error message to the user
+              console.error('Error adding task:', response.data);
+              window.alert('An error occurred while adding the task. Please try again later.');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            window.alert('An error occurred while submitting the form. Please try again later.');
+            // Handle any errors that occur during the request
+        }
+        
+
     };
     
 
@@ -87,7 +140,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate  ,onCl
 
 
                   <div className="mb-4 ">
-                      <label className="block text-sm font-medium text-gray-700">Time</label>
+                      <label className="block text-sm font-medium text-gray-700">Time (24 hour)</label>
                       <div className="flex items-center">
                         <div className="mt-2 py-5">
                             <input type="text" {...register("hour",{ required: 'Please fill in the hour' })} id="roomNumber" autoComplete="roomNumber" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />

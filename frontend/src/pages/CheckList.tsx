@@ -38,9 +38,9 @@ export default function CheckList() {
 
     const patientTaskList: { [key: string]: Task[] } = {
         "01/08/2023": [
-            { id: 3, time: '12:00 PM', task: 'Prepare Meals', completed: false },
-            { id: 1, time: '09:00 AM', task: 'Administer Medication', completed: true },
-            { id: 2, time: '10:30 AM', task: 'Assist with Bathing', completed: false },
+            { id: 3, time: '12:00', task: 'Prepare Meals', completed: false },
+            { id: 1, time: '09:00', task: 'Administer Medication', completed: true },
+            { id: 2, time: '10:30', task: 'Assist with Bathing', completed: false },
             
         ],
         "02/08/2023": [
@@ -147,6 +147,7 @@ export default function CheckList() {
                         firstName={firstName}
                         lastName={lastName}
                         selectedDate  = {selectedDateFormat}
+                        taskListSize={tasksToShow.length} 
                         onClose={closeModal} // Pass the onClose function to component B
                     />
                     )}
@@ -245,6 +246,7 @@ export default function CheckList() {
                         firstName={firstName}
                         lastName={lastName}
                         selectedDate  = {selectedDateFormat}
+                        taskListSize={tasksToShow.length + 1} 
                         onClose={closeModal} // Pass the onClose function to component B
                     />
                     )}
