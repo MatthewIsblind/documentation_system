@@ -87,21 +87,7 @@ def add_patient_task():
                 {'name': patient_name},
                 {'$set': {'patientTaskList': patientTaskList}}
             )
-            # # Update the patient's task list for the specified date
-            # task_list = patient['patientTaskList'].get(task_date, [])
-            # task_data['id'] = len(task_list) + 1  # Assign a unique ID
-            # task_list.append(task_data)
-            # patient['patientTaskList'][task_date] = task_list
 
-            
-
-            # # Update the patient's task list in the database
-            # mongo.db.patients.update_one(
-            #     {'name': patient_name},
-            #     {'$set': {'patientTaskList': patient['patientTaskList']}}
-            # )
-
-            # print(mongo.db.tasklist.find_one({'name': patient_name}))
             return jsonify({'message': 'Task added successfully'})
 
         else:
@@ -109,6 +95,29 @@ def add_patient_task():
 
     except Exception as e:
         return jsonify({'error': str(e)})
+
+@app.route('/api/get_tasks', methods=['GET'])
+def get_task_list():
+    try:
+        date = request.args.get('date')
+        print(date)
+        first_name = request.args.get('firstName')
+        last_name = request.args.get('lastName')
+        full_name = f"{first_name} {last_name}"
+
+        # Find the patient by name
+        patient = mongo.db.tasklist.find_one({'name': full_name})
+        print(patient)
+        if patient:
+            patient_task_list = patient.get('patientTaskList', {})
+            tasks_for_date = patient_task_list.get(date, [])
+
+            return jsonify({"tasks": tasks_for_date}), 200
+        else:
+            return jsonify({"error": "Patient not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 
 if __name__ == '__main__':
