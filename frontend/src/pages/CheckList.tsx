@@ -83,7 +83,8 @@ export default function CheckList() {
                     console.log("there is nothing")
                     setTasksToShow([]);
                 } else {
-                    setTasksToShow(response.data.tasks);
+                    const sortedTasks = sortTasksByTime(response.data.tasks)
+                    setTasksToShow(sortedTasks);
                 }
                 
             })

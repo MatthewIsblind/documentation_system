@@ -95,7 +95,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
             if (response.status === 200) {
               // Task added successfully on the server
               // You can update your client-side task list if needed
-              console.log('Task added successfully:', response.data);
+              onClose();
             } else {
               // Handle errors, e.g., display an error message to the user
               console.error('Error adding task:', response.data);
