@@ -119,6 +119,43 @@ def get_task_list():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/api/delete_task', methods=['POST'])
+def delete_task():
+    print("delete")
+    try:
+        data = request.get_json()
+        patient_name = data.get('patientName')
+        task_date = data.get('taskDate')
+        task_id = data.get('taskID')
+
+        # Get the tasklist collection from MongoDB
+        tasklist = mongo.db.tasklist
+
+        # Find the document with the matching patient name and task date
+        result = tasklist.find_one({'name': patient_name, 'patientTaskList.' + task_date: {'$exists': True}})
+
+        if result:
+            # Extract the tasks for the specific date
+            tasks = result['patientTaskList'][task_date]
+
+            # Find the task with the matching ID and remove it
+            updated_tasks = [task for task in tasks if task['id'] != task_id]
+
+            # Update the document in MongoDB with the new task list
+            tasklist.update_one(
+                {'name': patient_name},
+                {'$set': {'patientTaskList.' + task_date: updated_tasks}}
+            )
+
+            return jsonify({'message': 'Task deleted successfully'}), 200
+
+        return jsonify({'message': 'Task not found'}), 404
+        
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True)

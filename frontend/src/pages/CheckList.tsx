@@ -115,6 +115,38 @@ export default function CheckList() {
             setTasksToShow(updatedTasks);
         };
 
+        const handleEdit = (taskId: number) => {
+            
+        }
+
+        const handleDelete = async(selectedDateFormat:string, id:number) => {
+            const requestBody = {
+                patientName: `${firstName} ${lastName}`,
+                taskDate :selectedDateFormat,
+                taskID : id,
+            } 
+
+            try {
+                const response = await axios.post('http://localhost:5000/api/delete_task', requestBody);
+                if (response.status === 200) {
+                    // Task added successfully on the server
+                    // You can update your client-side task list if needed
+                    console.error('task deleted:', response.data);
+                    updateTasksToShow(selectedDate)
+                } else {
+                    // Handle errors, e.g., display an error message to the user
+                    console.error('Error deleting task:', response.data);
+                    window.alert('An error occurred while deleting the task. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Error deleting', error);
+                window.alert('An error occurred while deleting the task. Please try again later.');
+                // Handle any errors that occur during the request
+            }
+
+
+        }
+
 
         return (
             <div className="container mx-auto p-4">
@@ -150,6 +182,7 @@ export default function CheckList() {
                         selectedDate  = {selectedDateFormat}
                         taskListSize={tasksToShow.length} 
                         onClose={closeModal} // Pass the onClose function to component B
+                        updateTasksToShow={updateTasksToShow}
                     />
                     )}
                 </div>
@@ -158,56 +191,69 @@ export default function CheckList() {
                 <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                 <table className="min-w-full divide-y divide-gray-300">
-                    <thead>
-                        <tr>
+                <thead>
+                    <tr>
                         <th
                             scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 w-3/6"
                         >
                             Task Name
                         </th>
                         <th
                             scope="col"
-                            className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900"
+                            className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900sm:pl-0  w-1/6"
                         >
                             Time
                         </th>
                         <th
                             scope="col"
-                            className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900"
+                            className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900sm:pl-0  w-1/6"
                         >
                             Status
                         </th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody className="divide-y divide-gray-200 bg-white">
-                        {tasksToShow.length > 0 &&  tasksToShow.map((task) => (
+                        <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 w-1/6">
+                            Actions
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                    {tasksToShow.length > 0 && tasksToShow.map((task) => (
                         <tr key={task.id}>
-                            <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                            <div className="font-medium text-gray-900 px-5">
-                                <input
-                                type="checkbox"
-                                className="mr-2"
-                                checked={task.completed}
-                                onChange={() => handleTaskToggle(task.id)}
-                                />
-                                {task.completed ? (
-                                <del>{task.task}</del>
-                                ) : (
-                                task.task
-                                )}
-                            </div>
+                            <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0 w-3/6">
+                                <div className="font-medium text-gray-900 px-5">
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={task.completed}
+                                        onChange={() => handleTaskToggle(task.id)}
+                                    />
+                                    <span className="truncate">{task.completed ? <del>{task.task}</del> : task.task}</span>
+                                </div>
                             </td>
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                            {task.time}
+                            <td className="whitespace-nowrap text-left px-3 py-5 text-sm text-gray-500 w-1/6">
+                                <span className="truncate">{task.time}</span>
                             </td>
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                            {task.completed ? "Complete" : "Not Complete"}
+                            <td className="whitespace-nowrap  px-3 py-5 text-sm text-gray-500 w-1/6">
+                                <span className="truncate">{task.completed ? "Complete" : "Not Complete"}</span>
                             </td>
+                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 w-1/6">
+                            <button
+                                onClick={() => handleEdit(task.id)} // Replace with your edit function
+                                className="text-blue-600 hover:text-blue-800 mr-2"
+                            >
+                                Edit
+                            </button>
+                            <button
+                                onClick={() => handleDelete(selectedDateFormat, task.id)} // Replace with your delete function
+                                className="text-red-600 hover:text-red-800"
+                            >
+                                Delete
+                            </button>
+                        </td>
                         </tr>
-                        ))}
-                    </tbody>
+                    ))}
+                </tbody>
                 </table>
                 </div>
                 </div>
@@ -249,6 +295,7 @@ export default function CheckList() {
                         selectedDate  = {selectedDateFormat}
                         taskListSize={tasksToShow.length + 1} 
                         onClose={closeModal} // Pass the onClose function to component B
+                        updateTasksToShow={updateTasksToShow}
                     />
                     )}
                 </div>
