@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { format } from 'date-fns'; // Import the format function
+import { format ,parse} from 'date-fns'; // Import the format function
 import TimePicker from 'react-time-picker';
 import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
@@ -11,9 +11,10 @@ import axios from 'axios';
 interface Props {
     firstName: String;
     lastName : String;
-    selectedDate : String;
+    selectedDate : string;
     taskListSize: Number;
     onClose: () => void; // Define the onClose prop as a function
+    updateTasksToShow: (date: Date) => void;
 }
 
 
@@ -24,6 +25,7 @@ interface FormData {
     minute : String;
     task : String;
     date: String;
+    
 }
 
 
@@ -34,6 +36,7 @@ const defaultFormData: FormData = {
     minute : '',
     task : '',
     date:'',
+    
 };
 
 
@@ -47,9 +50,11 @@ interface Task {
 
 
 // Separate component for adding a new task
-const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskListSize ,onClose}) => {
+const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskListSize ,onClose,updateTasksToShow}) => {
     const handleClose = () => {
         onClose(); // Call the onClose function passed from component A
+        const parsedDate = parse(selectedDate, 'dd/MM/yyyy', new Date());
+        updateTasksToShow(parsedDate);
     };
 
     
@@ -95,7 +100,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
             if (response.status === 200) {
               // Task added successfully on the server
               // You can update your client-side task list if needed
-              onClose();
+              handleClose();
             } else {
               // Handle errors, e.g., display an error message to the user
               console.error('Error adding task:', response.data);

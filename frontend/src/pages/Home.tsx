@@ -115,6 +115,7 @@ const Home: React.FC = () => {
                   >
                     <span className="sr-only">Actions</span>
                   </th>
+
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
