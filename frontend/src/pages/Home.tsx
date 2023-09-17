@@ -3,168 +3,33 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { format, parse } from 'date-fns'; // Import date-fns functions
 
-interface Patient {
-  patientFirstName: string;
-  patientLastName: string;
-  gender: string;
-  roomNumber : string;
-  bedNumber : string;
-  dateOfBirth :string ;
-  dateOfAdmission :string;
-  
-  
-  kinName: string;
-  EmergencyContactNumber: string;
-  
-}
+// Define your navigation links
+const navigation = [
+  { name: 'Home', to: '/' },
+  { name: 'Info Table', to: '/infoTable' },
+  { name: 'Hand Over', to: '/handOver' },
+  { name: 'Create Patient', to: '/UpdatePatientInfo' },
+  { name: 'Patient Dashboard', to: '/PatientDashboard' },
+];
 
 const Home: React.FC = () => {
 
-  const [patient, setPatient] = React.useState<Patient[]>([]);
-  const [searchTerm, setSearchTerm] = React.useState<string>(''); // State for the search term
 
-  useEffect(() => {
-    // Fetch data from the backend endpoint using axios
-    axios.get('http://localhost:5000/api/get_patients')
-      .then((response) => {
-        const data = response.data;
-        if (data && data.data) {
-          setPatient(data.data);
-        }
-        console.log(data);
-      })
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []);
-
-
-  // Function to filter patients based on search term
-  const filteredPatients = patient.filter((patient) =>
-    patient.patientFirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.patientLastName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  
   return (
-    <div className="h-screen px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">Patients</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all the patients in your facility, including their details.
-          </p>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <Link
-            to="/updatePatientInfo"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add Patient Info
-          </Link>
-        </div>
-      </div>
-
-      {/* Search bar */}
-      <div className="mt-4 mb-4">
-        <input
-          type="text"
-          placeholder="Search patients..."
-          className="border border-gray-300 p-2 rounded-md w-full"
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                  >
-                    Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Gender
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Room Number
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Emergency Contact
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Bed Number
-                  </th>
-                  <th
-                    scope="col"
-                    className="relative py-3.5 pl-3 pr-4 sm:pr-0 px-4"
-                  >
-                    <span className="sr-only">Actions</span>
-                  </th>
-
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
-                {filteredPatients.map((patient) => (
-                  <tr key={patient.patientFirstName}>
-                    <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                      <div className="font-medium text-gray-900">
-                        {patient.patientFirstName} {patient.patientLastName}
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                      {patient.gender}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                      {patient.roomNumber}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                      {patient.EmergencyContactNumber}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                      {patient.bedNumber}
-                    </td>
-                    <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900 px-3"
-                      >
-                        Edit
-                        <span className="sr-only">, {patient.patientFirstName}</span>
-                      </a>
-                      <Link
-                        to={`/checklist`}
-                        state={{
-                          firstName: patient.patientFirstName,
-                          lastName: patient.patientLastName,
-                        }}
-                        className="text-green-600 hover:text-green-900 px-3"
-                      >
-                        Check Task List
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+    <div className="flex flex-col items-center justify-center h-screen">
+    <h1 className="text-3xl font-semibold mb-6">Welcome to the Home Page</h1>
+    <div className="flex flex-col gap-4">
+      {navigation.map((navItem, index) => (
+        <Link
+          key={index}
+          to={navItem.to}
+          className="p-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md text-center font-semibold text-lg"
+        >
+          {navItem.name}
+        </Link>
+      ))}
     </div>
+  </div>
   );
 
 

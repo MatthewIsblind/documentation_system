@@ -8,8 +8,8 @@ const navigation = [
   { name: 'Home', to: '/' },
   { name: 'infoTable', to: '/infoTable' },
   { name: 'handOver', to: '/handOver' },
-  { name: 'login', to: '/login' },
-  { name: 'UpdatePatientInfo', to: '/UpdatePatientInfo' }
+  { name: 'Create Patient', to: '/UpdatePatientInfo' },
+  { name: 'PatientDashboard', to: '/PatientDashboard' }
 ];
 
 function classNames(...classes) {
