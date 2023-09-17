@@ -155,7 +155,43 @@ def delete_task():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+@app.route('/api/update_task', methods=['POST'])
+def update_task():
+    try:
+        
+        data = request.json
+        print(data)
+        # Extract the task ID, patient name, and task date from the request data
+        task_id = data['taskId']
+        patient_name = data['patientName']
+        task_date = data['taskDate']
 
+        # Find the patient's task list for the given date
+        task_list = mongo.db.tasklist.find_one({'name': patient_name})
+        if task_list and task_date in task_list['patientTaskList']:
+            tasks = task_list['patientTaskList'][task_date]
+            print(tasks)
+            for task in tasks:
+                if task['id'] == task_id:
+                    # Toggle the completion status
+                    task['completed'] = not task['completed']
+                    print("changed")
+
+            # Update the task list in the MongoDB collection
+            result = mongo.db.tasklist.update_one({'name': patient_name}, {'$set': {'patientTaskList': task_list['patientTaskList']}})
+
+            if result.modified_count > 0:
+                # Return the updated task list for the date
+                updated_tasks = task_list['patientTaskList'][task_date]
+                print(update_task)
+                return jsonify({'message': 'Task completion status toggled successfully', 'updatedTasks': updated_tasks}), 200
+            else:
+                return jsonify({'message': 'Task not found or not toggled'}), 404
+
+        return jsonify({'message': 'Patient or task date not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

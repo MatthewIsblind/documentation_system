@@ -14,12 +14,12 @@ import CheckList from './pages/CheckList';
 
 function App() {
     return (
-        <div className='h-screen'>
+        <div className='h-screen flex flex-col'>
           <NavBar />
           
-          <div className="h-screen bg-primary overflow-hidden ">
-            <div className="flex justify-center ">
-                <div className="bg-secondary w-full lg:w-5/6 mt-5 rounded-md">
+          <div className=" bg-primary flex-grow">
+            <div className="flex justify-center  ">
+                <div className=" bg-secondary min-h-screen w-full lg:w-5/6 mt-5 rounded-md ">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/InfoTable" element={<InfoTable />} />

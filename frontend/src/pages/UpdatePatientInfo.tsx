@@ -82,10 +82,10 @@ const UpdatePatientInfo: React.FC = () => {
   };
   
   return(
-            <div className='h-screen'>
+            <div className='flex-grow'>
                 <h1>This is for updating the patient info</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="border-b border-gray-900/10 pb-12 px-5">
+                    <div className=" border-b border-gray-900/10 pb-12 px-5 h-full overflow-y-auto">
                         <h1 className="text-3xl font-semibold leading-7 text-gray-900">Personal Information</h1>
                         
                         <div className="mt-10 grid grid-cols-1 gap-x-2 gap-y-5 lg:grid-cols-6 px-5">
@@ -174,7 +174,7 @@ const UpdatePatientInfo: React.FC = () => {
                     </div>
     
     
-                    <div className="border-b border-gray-900/10 pb-12 px-5">
+                    <div className="border-b border-gray-900/10 pb-12 px-5 h-full overflow-y-auto">
                         
                         <h2 className="text-3xl sm:col-span-4 font-semibold leading-7 text-gray-900">Emergecny contact info</h2>  
                         <div className="mt-10 grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-6 px-5"> 
