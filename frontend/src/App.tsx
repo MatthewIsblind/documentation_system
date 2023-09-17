@@ -11,6 +11,7 @@ import { Route,Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import UpdatePatientInfo from './pages/UpdatePatientInfo';
 import CheckList from './pages/CheckList';
+import PatientDashboard from './pages/PatientDashboard';
 
 function App() {
     return (
@@ -18,8 +19,8 @@ function App() {
           <NavBar />
           
           <div className=" bg-primary flex-grow">
-            <div className="flex justify-center  ">
-                <div className=" bg-secondary min-h-screen w-full lg:w-5/6 mt-5 rounded-md ">
+            <div className="flex justify-center ">
+                <div className=" bg-secondary w-full lg:w-5/6 mt-5 rounded-md ">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/InfoTable" element={<InfoTable />} />
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/UpdatePatientInfo" element={<UpdatePatientInfo />} />
                     <Route path="/CheckList" element={<CheckList/>} />
+                    <Route path="/PatientDashBoard" element={<PatientDashboard/>} />
                 </Routes>
                 </div>
             </div>

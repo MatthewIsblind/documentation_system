@@ -70,10 +70,6 @@ def add_patient_task():
 
 
         if patient:
-            print("data")
-            print(data)
-            print("patient")
-            print(patient)
             patientTaskList = patient['patientTaskList']
             if task_date not in patientTaskList:
                 patientTaskList[task_date] = []  # Initialize the list if it doesn't exist
@@ -141,17 +137,22 @@ def delete_task():
             # Find the task with the matching ID and remove it
             updated_tasks = [task for task in tasks if task['id'] != task_id]
 
-            # Update the document in MongoDB with the new task list
-            tasklist.update_one(
-                {'name': patient_name},
-                {'$set': {'patientTaskList.' + task_date: updated_tasks}}
-            )
+            if not updated_tasks:
+                # If updated_tasks is empty, remove the entire date entry
+                tasklist.update_one(
+                    {'name': patient_name},
+                    {'$unset': {'patientTaskList.' + task_date: ''}}
+                )
+            else:
+                # Update the document in MongoDB with the new task list
+                tasklist.update_one(
+                    {'name': patient_name},
+                    {'$set': {'patientTaskList.' + task_date: updated_tasks}}
+                )
 
             return jsonify({'message': 'Task deleted successfully'}), 200
 
         return jsonify({'message': 'Task not found'}), 404
-        
-
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     

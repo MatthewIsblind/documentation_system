@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns'; // Import the format function
 import AddTaskButton from './AddTaskutton';
 import axios from 'axios'; // Import axios at the beginning of your file
-
+import EditTaskButton from './EditTaskButton';
 
 interface Task {
     id: number;
@@ -28,7 +28,7 @@ interface getRequest {
 
 export default function CheckList() {
 
-    //pop up stuff
+    //pop up stuff for add task
     const [modal,setModal] = useState(false);
 
     const toggleModal = () => {
@@ -40,6 +40,23 @@ export default function CheckList() {
     const closeModal = () => {
         setModal(false);
     };
+
+    //pop up stuff for edit task 
+    const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+
+    // Function to handle opening the edit form
+    const openEditTaskForm = () => {
+        console.log(isEditFormVisible)
+      setIsEditFormVisible(!isEditFormVisible);
+    };
+  
+    // Function to handle closing the edit form
+    const handleCloseEditForm = () => {
+        console.log(isEditFormVisible)
+      setIsEditFormVisible(false);
+    };
+
+
   
     const sortTasksByTime = (tasks: Task[]) => {
       
@@ -167,11 +184,13 @@ export default function CheckList() {
         };
         
 
-        const handleEdit = (taskId: number) => {
-            
-        }
-
         const handleDelete = async(selectedDateFormat:string, id:number) => {
+            const isConfirmed = window.confirm("Are you sure you want to delete this task?");
+
+            if (!isConfirmed) {
+                // User canceled the deletion
+                return;
+            }
             const requestBody = {
                 patientName: `${firstName} ${lastName}`,
                 taskDate :selectedDateFormat,
@@ -181,8 +200,6 @@ export default function CheckList() {
             try {
                 const response = await axios.post('http://localhost:5000/api/delete_task', requestBody);
                 if (response.status === 200) {
-                    // Task added successfully on the server
-                    // You can update your client-side task list if needed
                     console.error('task deleted:', response.data);
                     updateTasksToShow(selectedDate)
                 } else {
@@ -202,7 +219,7 @@ export default function CheckList() {
 
     if (tasksToShow.length === 0 && dataLoaded) {
         return (
-            <div className="container mx-auto p-4">
+            <div className="container mx-auto p-4 flex-grow">
                 <h1 className="text-3xl font-bold mb-2">
                     Patient: {firstName} {lastName}
                     
@@ -243,7 +260,7 @@ export default function CheckList() {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 flex-grow ">
             <h1 className="text-3xl font-bold mb-2">
                 Patient: {firstName} {lastName}
 
@@ -333,10 +350,22 @@ export default function CheckList() {
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 w-1/6">
                         <button
-                            onClick={() => handleEdit(task.id)} // Replace with your edit function
+                            onClick={() => openEditTaskForm()} // Replace with your edit function
                             className="text-blue-600 hover:text-blue-800 mr-2"
                         >
                             Edit
+
+                            {isEditFormVisible && (
+                                <EditTaskButton
+                                task={task.task}
+                                firstName= {firstName}
+                                lastName ={lastName}
+                                selectedDate  = {selectedDateFormat}
+                                time={task.time}
+                                onClose={handleCloseEditForm}
+                                updateTasksToShow={updateTasksToShow}
+                                />
+                            )}
                         </button>
                         <button
                             onClick={() => handleDelete(selectedDateFormat, task.id)} // Replace with your delete function
