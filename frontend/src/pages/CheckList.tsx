@@ -46,13 +46,11 @@ export default function CheckList() {
 
     // Function to handle opening the edit form
     const openEditTaskForm = () => {
-        console.log(isEditFormVisible)
       setIsEditFormVisible(!isEditFormVisible);
     };
   
     // Function to handle closing the edit form
     const handleCloseEditForm = () => {
-        console.log(isEditFormVisible)
       setIsEditFormVisible(false);
     };
 
@@ -184,7 +182,7 @@ export default function CheckList() {
         };
         
 
-        const handleDelete = async(selectedDateFormat:string, id:number) => {
+        const handleDelete = async(selectedDateFormat:string, taskName:string,taskTime:string) => {
             const isConfirmed = window.confirm("Are you sure you want to delete this task?");
 
             if (!isConfirmed) {
@@ -194,7 +192,8 @@ export default function CheckList() {
             const requestBody = {
                 patientName: `${firstName} ${lastName}`,
                 taskDate :selectedDateFormat,
-                taskID : id,
+                taskName :taskName,
+                taskTime : taskTime
             } 
 
             try {
@@ -368,7 +367,7 @@ export default function CheckList() {
                             )}
                         </button>
                         <button
-                            onClick={() => handleDelete(selectedDateFormat, task.id)} // Replace with your delete function
+                            onClick={() => handleDelete(selectedDateFormat, task.task,task.time)} // Replace with your delete function
                             className="text-red-600 hover:text-red-800"
                         >
                             Delete
