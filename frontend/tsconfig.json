@@ -28,5 +28,5 @@
     ],
     "include": [
       "./src/**/*.tsx"
-, "src/Navbar.js", "src/pages/CalenderPicker.js"    ]
+, "src/Navbar.js", "src/pages/CalenderPicker.js", "src/pages/Selector.jsx"    ]
   }

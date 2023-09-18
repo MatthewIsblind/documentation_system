@@ -65,26 +65,34 @@ def add_patient_task():
         patient_name = data.get('patientName', '')
         task_date = data.get('taskDate', '')
         task_data = data.get('taskData', {})
+        
         # Find the patient by name
         patient = mongo.db.tasklist.find_one({'name': patient_name})
 
-
         if patient:
             patientTaskList = patient['patientTaskList']
+            
             if task_date not in patientTaskList:
                 patientTaskList[task_date] = []  # Initialize the list if it doesn't exist
                 print("made array")
-            task_data['id'] = len(patientTaskList[task_date]) + 1
+            
+            # Generate a unique task id
+            max_id = max(task['id'] for tasks in patientTaskList.values() for task in tasks)
+            task_data['id'] = max_id + 1
+            
             patientTaskList[task_date].append(task_data)  # Append the new task_data to the list
             print(patient)
 
             # Update the patient's task list in the "tasklist" collection
-            mongo.db.tasklist.update_one(
+            result = mongo.db.tasklist.update_one(
                 {'name': patient_name},
                 {'$set': {'patientTaskList': patientTaskList}}
             )
 
-            return jsonify({'message': 'Task added successfully'})
+            if result.modified_count == 1:
+                return jsonify({'message': 'Task added successfully'})
+            else:
+                return jsonify({'error': 'Task could not be added'})
 
         else:
             return jsonify({'error': 'Patient not found'})
@@ -121,38 +129,47 @@ def delete_task():
     try:
         data = request.get_json()
         patient_name = data.get('patientName')
-        task_date = data.get('taskDate')
-        task_id = data.get('taskID')
+        task_name = data.get('taskName')
+        task_time = data.get('taskTime')
 
         # Get the tasklist collection from MongoDB
         tasklist = mongo.db.tasklist
 
-        # Find the document with the matching patient name and task date
-        result = tasklist.find_one({'name': patient_name, 'patientTaskList.' + task_date: {'$exists': True}})
+        # Find the document with the matching patient name
+        result = tasklist.find_one({'name': patient_name})
 
         if result:
-            # Extract the tasks for the specific date
-            tasks = result['patientTaskList'][task_date]
+            # Initialize a variable to keep track of whether a task was deleted
+            task_deleted = False
 
-            # Find the task with the matching ID and remove it
-            updated_tasks = [task for task in tasks if task['id'] != task_id]
+            # Iterate through the patient's task dates
+            for task_date, tasks in result['patientTaskList'].items():
+                # Filter the tasks to find the one with matching name and time
+                updated_tasks = [task for task in tasks if task['task'] != task_name or task['time'] != task_time]
 
-            if not updated_tasks:
-                # If updated_tasks is empty, remove the entire date entry
-                tasklist.update_one(
-                    {'name': patient_name},
-                    {'$unset': {'patientTaskList.' + task_date: ''}}
-                )
+                # Check if a task was removed
+                if len(updated_tasks) < len(tasks):
+                    # Update the document in MongoDB with the new task list
+                    tasklist.update_one(
+                        {'name': patient_name},
+                        {'$set': {'patientTaskList.' + task_date: updated_tasks}}
+                    )
+                    task_deleted = True
+
+                if not updated_tasks:
+                    tasklist.update_one(
+                        {'name': patient_name},
+                        {'$unset': {'patientTaskList.' + task_date: ''}}
+                    )
+
+                    
+
+            if task_deleted:
+                return jsonify({'message': 'Task deleted successfully'}), 200
             else:
-                # Update the document in MongoDB with the new task list
-                tasklist.update_one(
-                    {'name': patient_name},
-                    {'$set': {'patientTaskList.' + task_date: updated_tasks}}
-                )
+                return jsonify({'message': 'Task not found'}), 404
 
-            return jsonify({'message': 'Task deleted successfully'}), 200
-
-        return jsonify({'message': 'Task not found'}), 404
+        return jsonify({'message': 'Patient not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
@@ -193,6 +210,14 @@ def update_task():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/get_task_options', methods=['GET'])
+def get_task_options():
+    # Fetch preset tasks from MongoDB collection
+    preset_tasks = list(mongo.db.presetTask.find({}, {'_id': 0}))
+    
+    return jsonify(preset_tasks)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
