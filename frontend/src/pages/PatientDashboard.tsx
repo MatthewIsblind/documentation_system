@@ -81,31 +81,31 @@ const PatientDashboard: React.FC = () => {
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                    className="py-3.5 pl-4 pr-3 text-left text-xl font-semibold text-gray-900 sm:pl-0"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-xl font-semibold text-gray-900"
                   >
                     Gender
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-xl font-semibold text-gray-900"
                   >
                     Room Number
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-xl font-semibold text-gray-900"
                   >
                     Emergency Contact
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-xl font-semibold text-gray-900"
                   >
                     Bed Number
                   </th>
@@ -121,24 +121,24 @@ const PatientDashboard: React.FC = () => {
               <tbody className="divide-y divide-gray-200 bg-white">
                 {filteredPatients.map((patient) => (
                   <tr key={patient.patientFirstName}>
-                    <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                    <td className="whitespace-nowrap py-5 pl-4 pr-3 text-xl sm:pl-0">
                       <div className="font-medium text-gray-900">
                         {patient.patientFirstName} {patient.patientLastName}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-5 text-xl text-gray-500">
                       {patient.gender}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-5 text-xl text-gray-500">
                       {patient.roomNumber}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-5 text-xl text-gray-500">
                       {patient.EmergencyContactNumber}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-5 text-xl text-gray-500">
                       {patient.bedNumber}
                     </td>
-                    <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-xl font-medium sm:pr-0">
                       <a
                         href="#"
                         className="text-indigo-600 hover:text-indigo-900 px-3"
