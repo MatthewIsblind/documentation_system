@@ -77,7 +77,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
                 return a.task_name.localeCompare(b.task_name);
               });
 
-              setTaskOptions(sortedTasks    ); // Set the task options in state
+              setTaskOptions(sortedTasks); // Set the task options in state
               
             } else {
               console.error('Error fetching task options:', response.data);

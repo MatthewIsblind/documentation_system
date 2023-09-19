@@ -60,7 +60,7 @@ def add_patient_task():
     print("add tasks")
     try:
         data = request.json  # Get the JSON data from the request
-        
+        print(data)
         # Extract the necessary data from the request body
         patient_name = data.get('patientName', '')
         task_date = data.get('taskDate', '')
@@ -77,12 +77,15 @@ def add_patient_task():
                 print("made array")
             
             # Generate a unique task id
-            max_id = max(task['id'] for tasks in patientTaskList.values() for task in tasks)
-            task_data['id'] = max_id + 1
+            max_id = 1  # Set the default ID to 1
+            
+            if patientTaskList[task_date]:
+                max_id = max(task['id'] for task in patientTaskList[task_date]) + 1
+            
+            task_data['id'] = max_id
             
             patientTaskList[task_date].append(task_data)  # Append the new task_data to the list
-            print(patient)
-
+            
             # Update the patient's task list in the "tasklist" collection
             result = mongo.db.tasklist.update_one(
                 {'name': patient_name},
@@ -102,6 +105,7 @@ def add_patient_task():
 
 @app.route('/api/get_tasks', methods=['GET'])
 def get_task_list():
+    print("gettin task list")
     try:
         date = request.args.get('date')
         print(date)
