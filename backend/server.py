@@ -223,6 +223,30 @@ def get_task_options():
     return jsonify(preset_tasks)
 
 
+
+@app.route('/api/get_patient_info', methods=['GET'])
+def get_patient_info():
+    print("Getting Patient Info")
+    
+    date = request.args.get('date')
+    print(date)
+    first_name = request.args.get('firstName')
+    last_name = request.args.get('lastName')
+    full_name = f"{first_name} {last_name}"
+
+    # Find the patient by name
+    patient = mongo.db.patients.find_one({'patientFirstName': first_name, 'patientLastName': last_name})
+    
+    if patient:
+        # Convert the ObjectId to a string
+        patient.pop('_id', None)
+        return jsonify({"patientProfile": patient}), 200
+    else:
+        return jsonify({'error': 'Patient not found'}), 404
+    
+            
+    
+
 if __name__ == '__main__':
     app.run(debug=True)
 
