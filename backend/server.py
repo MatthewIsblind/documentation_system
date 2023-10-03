@@ -223,6 +223,111 @@ def get_task_options():
     return jsonify(preset_tasks)
 
 
+
+@app.route('/api/get_patient_info', methods=['GET'])
+def get_patient_info():
+    print("Getting Patient Info")
+    
+    date = request.args.get('date')
+    print(date)
+    first_name = request.args.get('firstName')
+    last_name = request.args.get('lastName')
+    full_name = f"{first_name} {last_name}"
+
+    # Find the patient by name
+    patient = mongo.db.patients.find_one({'patientFirstName': first_name, 'patientLastName': last_name})
+    
+    if patient:
+        # Convert the ObjectId to a string
+        patient.pop('_id', None)
+        return jsonify({"patientProfile": patient}), 200
+    else:
+        return jsonify({'error': 'Patient not found'}), 404
+    
+            
+@app.route('/api/add_care_note', methods=['POST'])
+def add_care_notes():
+    # Get the JSON data from the request
+    request_data = request.get_json()
+    print(request_data)
+    if not request_data:
+        print("here")
+        return jsonify({'error': 'Invalid data'}), 400
+        
+    patient_name = request_data.get('patientName')
+    note_date = request_data.get('date')
+    note_time = request_data.get('time')
+    note_text = request_data.get('careNote')
+    username = request_data.get('username')
+
+    if not patient_name or not note_date or not note_time or not note_text or not username:
+        return jsonify({'error': 'Incomplete data'}), 400
+
+    # Define a care note structure
+    care_note = {
+        'time': note_time,
+        'note': note_text,
+        'username': username
+    }
+
+    # Create a new care note entry
+    new_entry = {
+        'patient_name': patient_name,
+        'carenote': {
+            note_date: [care_note]  # Initialize the date with a list containing the care note
+        }
+    }
+    
+
+    care_notes_collection  = mongo.db.careNotes
+    
+    # Check if a document for the patient already exists
+    existing_entry = care_notes_collection.find_one({'patient_name': patient_name})
+
+    if existing_entry:
+        # Document already exists, add or update the care note
+        care_notes = existing_entry['carenote']
+        if note_date in care_notes:
+            care_notes[note_date].append(care_note)  # Add a new care note to the existing date
+        else:
+            care_notes[note_date] = [care_note]  # Create a new date entry
+        care_notes_collection.update_one({'patient_name': patient_name}, {'$set': {'carenote': care_notes}})
+    else:
+        # Document doesn't exist, create a new document
+        care_notes_collection.insert_one(new_entry)
+
+    return jsonify({'message': 'Care note added to MongoDB'}), 200    
+
+
+@app.route('/api/get_past_care_notes', methods=['GET'])
+def get_past_care_notes():
+    # Get the patient name and date from the query parameters
+    patient_name = request.args.get('patientName')
+    date = request.args.get('date')
+    care_notes_collection = mongo.db.careNotes
+    print(date)
+
+    # Find the patient by name
+    patient = care_notes_collection.find_one({'patient_name': patient_name})
+    print(patient)
+
+    if patient:
+        # Retrieve the care notes for the specified date
+        care_notes_for_date = patient['carenote'].get(date, [])
+
+        
+        if care_notes_for_date:
+            # Return the care notes for the specified date
+            return jsonify(care_notes_for_date)
+        else:
+            return jsonify({'error': f'No care notes found for {patient_name} on {date}'}), 404
+    else:
+        return jsonify({'error': f'Patient {patient_name} not found'}), 404
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 

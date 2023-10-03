@@ -8,11 +8,12 @@ import axios from 'axios';
 
 interface Props {
     task:string;
+    taskID :number;
     firstName: String;
     lastName : String;
     selectedDate : string;
     time :string
-    onClose: () => void; // Define the onClose prop as a function
+    onClose: (taskId: number) => void;  // Define the onClose prop as a function
     updateTasksToShow: (date: Date) => void;
 }
 
@@ -49,6 +50,7 @@ interface Task {
 
 
 const EditTaskButton: React.FC<Props> = ({
+        taskID,
         task,
         firstName,
         lastName,
@@ -59,18 +61,24 @@ const EditTaskButton: React.FC<Props> = ({
     }) => {
 
     const handleClose = () => {
-        onClose(); 
+        onClose(taskID); 
         const parsedDate = parse(selectedDate, 'dd/MM/yyyy', new Date());
         updateTasksToShow(parsedDate);
     };
 
     
     const form = useForm<FormData>({defaultValues: defaultFormData, });
-    const { register, handleSubmit,control ,  formState: { errors } } = form;
+    const { register, handleSubmit,control, setValue, formState: { errors } } = form;
 
-
+    useEffect(() => {
+        console.log(task)
+        form.setValue('task', task);
+        form.setValue('hour', time.split(':')[0]);
+        form.setValue('minute', time.split(':')[1]);
+      }, [task, time, form]);
 
     const onSubmit = async (data: FormData) => {
+        console.log("editing")
 //     const editedTask = {
 //       ...task,
 //       task: data.task,
@@ -111,7 +119,7 @@ const EditTaskButton: React.FC<Props> = ({
                 </h2>
                 <button
                     className="text-gray-500 hover:text-gray-700"
-                    onClick={handleClose}
+                    onClick={() => onClose(taskID)} 
                 >
                     Close
                 </button>
@@ -155,7 +163,7 @@ const EditTaskButton: React.FC<Props> = ({
                         type="submit"
                         className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
                     >
-                        Add
+                        Save Edit
                     </button>
                 </div>
             </form>

@@ -139,13 +139,17 @@ const PatientDashboard: React.FC = () => {
                       {patient.bedNumber}
                     </td>
                     <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-xl font-medium sm:pr-0">
-                      <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900 px-3"
+                      
+                      <Link
+                        to={`/PatientProfile`}
+                        state={{
+                          firstName: patient.patientFirstName,
+                          lastName: patient.patientLastName,
+                        }}
+                        className="text-green-600 hover:text-green-900 px-3"
                       >
-                        Edit
-                        <span className="sr-only">, {patient.patientFirstName}</span>
-                      </a>
+                        Open Profile
+                      </Link>
                       <Link
                         to={`/checklist`}
                         state={{

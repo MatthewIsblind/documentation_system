@@ -32,26 +32,32 @@ export default function CheckList() {
     const [modal,setModal] = useState(false);
 
     const toggleModal = () => {
+        console.log("openeing")
         setModal(!modal)
     }
 
-
-    // Function to close the modal
     const closeModal = () => {
         setModal(false);
     };
 
     //pop up stuff for edit task 
-    const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+    const [editFormVisibility, setEditFormVisibility] = useState<{ [key: number]: boolean }>({});
 
-    // Function to handle opening the edit form
-    const openEditTaskForm = () => {
-      setIsEditFormVisible(!isEditFormVisible);
+
+    // Function to handle opening the edit form for a specific task
+    const openEditTaskForm = (taskId: number) => {
+        setEditFormVisibility((prevState) => ({
+        ...prevState,
+        [taskId]: true,
+        }));
     };
-  
-    // Function to handle closing the edit form
-    const handleCloseEditForm = () => {
-      setIsEditFormVisible(false);
+    
+    // Function to handle closing the edit form for a specific task
+    const closeEditTaskForm = (taskId: number) => {
+        setEditFormVisibility((prevState) => ({
+        ...prevState,
+        [taskId]: false,
+        }));
     };
 
 
@@ -349,25 +355,28 @@ export default function CheckList() {
                         </td>
                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 w-1/6">
                         <button
-                            onClick={() => openEditTaskForm()} // Replace with your edit function
+                            onClick={() => openEditTaskForm(task.id)} // Replace with your edit function
                             className="text-blue-600 hover:text-blue-800 mr-2"
                         >
                             Edit
 
-                            {isEditFormVisible && (
-                                <EditTaskButton
-                                task={task.task}
-                                firstName= {firstName}
-                                lastName ={lastName}
-                                selectedDate  = {selectedDateFormat}
-                                time={task.time}
-                                onClose={handleCloseEditForm}
-                                updateTasksToShow={updateTasksToShow}
-                                />
-                            )}
                         </button>
+                        
+                        {editFormVisibility[task.id] && (
+                            <EditTaskButton
+                            taskID = {task.id}
+                            task={task.task}
+                            firstName= {firstName}
+                            lastName ={lastName}
+                            selectedDate  = {selectedDateFormat}
+                            time={task.time}
+                            onClose={() => closeEditTaskForm(task.id)} 
+                            updateTasksToShow={updateTasksToShow}
+                            />
+                        )}
+
                         <button
-                            onClick={() => handleDelete(selectedDateFormat, task.task,task.time)} // Replace with your delete function
+                            onClick={() => handleDelete(selectedDateFormat, task.task,task.time)} 
                             className="text-red-600 hover:text-red-800"
                         >
                             Delete
