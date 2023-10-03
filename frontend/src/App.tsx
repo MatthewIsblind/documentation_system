@@ -47,7 +47,7 @@ function App() {
                 <Route path="/UpdatePatientInfo" element={isLoggedIn ? <UpdatePatientInfo /> : <Navigate to="/login" />} />
                 <Route path="/CheckList" element={isLoggedIn ? <CheckList /> : <Navigate to="/login" />} />
                 <Route path="/PatientDashBoard" element={isLoggedIn ? <PatientDashboard /> : <Navigate to="/login" />} />
-                <Route path="/PatientProfile" element={isLoggedIn ? <PatientProfile /> : <Navigate to="/login" />} />
+                <Route path="/PatientProfile" element={isLoggedIn ? <PatientProfile userName={userName} /> : <Navigate to="/login" />} />
               </Routes>
             </div>
           </div>
