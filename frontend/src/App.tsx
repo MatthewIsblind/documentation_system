@@ -32,6 +32,22 @@ function App() {
       }
     }, [location]); 
 
+    // Handle the window unload event to set isLoggedIn to false
+    useEffect(() => {
+      const handleUnload = (e : BeforeUnloadEvent) => {
+        // Set isLoggedIn to false in localStorage when the window is closed
+        localStorage.setItem('isLoggedIn', 'false');
+      };
+
+      // Attach the event listener
+      window.addEventListener('unload', handleUnload);
+
+      // Remove the event listener when the component is unmounted
+      return () => {
+        window.removeEventListener('unload', handleUnload);
+      };
+    }, []);
+
 
     return (
       <div className="h-screen flex flex-col">

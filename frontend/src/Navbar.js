@@ -30,10 +30,8 @@ export default function NavBar({ isLoggedIn,setIsLoggedIn, userName }) {
 
 
   const navigationWithLogout = isLoggedIn
-    ? [{ name: "Hello " + userName, to: '#', clickable: false },
-      ...navigation,
-      {name: 'Logout',to: '/login',onClick: handleLogout,},]
-    : navigation;
+  ? [...navigation, { name: 'Logout', to: '/login', onClick: handleLogout }]
+  : navigation;
 
 
   return (
@@ -59,6 +57,14 @@ export default function NavBar({ isLoggedIn,setIsLoggedIn, userName }) {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
+                  {isLoggedIn && (
+                      <p className={classNames(
+                        'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'block rounded-md px-3 py-2 text-base font-medium'
+                      )}>
+                        Hello, {userName}
+                      </p>
+                    )}
                     {isLoggedIn && navigationWithLogout.map((item) => (
                       <NavLink
                         key={item.name}
@@ -66,7 +72,7 @@ export default function NavBar({ isLoggedIn,setIsLoggedIn, userName }) {
                         onClick={item.onClick} // Attach onClick handler
                         className={classNames(
                           'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
+                          'rounded-md px-3 py-2 text-sm font-medium',
                         )}
                       >
                         {item.name}
@@ -81,6 +87,14 @@ export default function NavBar({ isLoggedIn,setIsLoggedIn, userName }) {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
+            {isLoggedIn && (
+                <p className={classNames(
+                  'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  'block rounded-md px-3 py-2 text-base font-medium'
+                )}>
+                  Hello, {userName}
+                </p>
+              )}
               {isLoggedIn && navigationWithLogout.map((item) => (
                 <NavLink
                   key={item.name}

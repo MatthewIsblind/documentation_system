@@ -24,6 +24,7 @@ function PatientProfile(userName) {
   const [emptyMessageBoolean,setemptyMessageBoolean] = useState(false)
   const [showAddNotes, setShowAddNotes] = useState(true);
   const [pastCareNotes , setpastCareNotes] = useState("");
+  const [pastCareNotesDate, setPastCareNotesDate] = useState(new Date());
 
 
   const getPatientProfile = () => {
@@ -70,7 +71,7 @@ function PatientProfile(userName) {
         .then((response) => {
           // Handle the response from the server, e.g., show a success message
           console.log('Care note saved successfully');
-          // You can add further actions or state updates here if needed.
+          window.alert("Care note has been saved.")
         })
         .catch((error) => {
           // Handle any errors that occur during the POST request
@@ -79,6 +80,11 @@ function PatientProfile(userName) {
         });
     }
     
+  };
+
+  const handleDisplayPastCareNotes = () => {
+    setShowAddNotes(false)
+    handleSelectDate(pastCareNotesDate || new Date()); // Use pastCareNotesDate if available, otherwise use the current date
   };
 
   const handleSelectDate = (date) => {
@@ -179,7 +185,7 @@ function PatientProfile(userName) {
               Add Care Notes
             </button>
             <button
-              onClick={() => setShowAddNotes(false)}
+              onClick={handleDisplayPastCareNotes}
               className={`px-4 py-2 ${
                 !showAddNotes ? 'bg-blue-700' : 'bg-blue-500'
               } text-white font-semibold rounded-md`}
@@ -219,33 +225,35 @@ function PatientProfile(userName) {
                 </div>
               </div>
             ) : (
-              <div>
+              <div className="flex flex-col w-5/6">
                 <div>
                   <h2 className="text-xl font-medium text-gray-900">Access Past Care Notes</h2>
                   <div className="flex items-center mb-4">
                     <DatePicker
-                      selected={selectedDate}
-                      onChange={(date) => handleSelectDate(date)}
+                      selected={pastCareNotesDate}
+                      onChange={(date) => setPastCareNotesDate(date)}
                       dateFormat="dd/MM/yyyy"
                     />
                   </div>
                   {selectedDate && pastCareNotes.length > 0 ? (
                     <div>
-                      <ul>
+                      
                         {pastCareNotes.map((note, index) => (
                           <li key="{index}">
                             <p>
                               <strong>Time:</strong> {note.time}
                             </p>
                             <p>
-                              <strong>Note:</strong> {note.note}
-                            </p>
-                            <p>
                               <strong>Username:</strong> {note.username}
+                              
                             </p>
+
+                            <div>
+                              <textarea className=" border-gray-300 rounded-md p-2 w-full h-40 " readOnly value={note.note} />
+                            </div>
                           </li>
                         ))}
-                      </ul>
+                      
                     </div>
                   ) : (
                     <p>Select a date to view past care notes.</p>
