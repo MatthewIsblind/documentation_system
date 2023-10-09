@@ -12,6 +12,7 @@ interface Task {
     time: string;
     task: string;
     completed: boolean;
+    comments:string;
 }
 
 interface PatientInfo {
@@ -26,7 +27,7 @@ interface getRequest {
     date:string
 }
 
-export default function CheckList() {
+export default function CheckList({ username }: { username: String }) {
 
     //pop up stuff for add task
     const [modal,setModal] = useState(false);
@@ -105,6 +106,7 @@ export default function CheckList() {
                     setTasksToShow([]);
                 } else {
                     const sortedTasks = sortTasksByTime(response.data.tasks)
+                    console.log(sortedTasks);
                     setTasksToShow(sortedTasks);
                 }
                 
@@ -120,6 +122,66 @@ export default function CheckList() {
         
 
     };
+
+    function formatTaskAsSentence(taskData: Task[]) {
+        return taskData
+          .map((task) => {
+            if (task.completed) {
+              if (task.comments) {
+                return `Finish task "${task.task}" scheduled at "${task.time}". Note: "${task.comments}".\n`;
+              } else {
+                return `Finish task "${task.task}" scheduled at "${task.time}".\n`;
+              }
+            } else {
+              if (task.comments) {
+                return `Haven't finished task "${task.task}" scheduled at "${task.time}". Note: "${task.comments}".\n`;
+              } else {
+                return `Haven't finished task "${task.task}" scheduled at "${task.time}".\n`;
+              }
+            }
+          })
+          .join('');
+      }
+
+    function formatFieldName(field :string) {
+    return field
+        .split(/(?=[A-Z])/)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+    }
+
+    const generateCareNote = (date: Date) => {
+        const formattedDate = format(date, 'dd/MM/yyyy');
+        console.log("Generating Care Note for date:", formattedDate);
+        console.log(tasksToShow);
+        const formattedSentence = formatTaskAsSentence(tasksToShow);
+        console.log(formattedSentence);
+        console.log(username)
+        // You can implement the logic to generate the care note here
+        console.log(formatFieldName(firstName) + ' ' + formatFieldName(lastName))
+        const requestData = {
+            patientName: formatFieldName(firstName) + ' ' + formatFieldName(lastName),
+            date: selectedDate.toLocaleDateString(), // Get the date part
+            time: selectedDate.toLocaleTimeString(), // Get the time part
+            careNote: formattedSentence,
+            username: username
+        }
+
+
+        // Send a POST request to your API
+        axios
+        .post('http://localhost:5000/api/add_care_note', requestData)
+        .then((response) => {
+            // Handle the response from the server, e.g., show a success message
+            console.log('Care note saved successfully');
+            window.alert("Care note has been saved.")
+        })
+        .catch((error) => {
+            // Handle any errors that occur during the POST request
+            console.error('Error saving care note:', error);
+            // You can display an error message to the user or take appropriate actions.
+        });
+      };
     
 
     const [dataLoaded, setDataLoaded] = useState(false); // Add this state variable
@@ -249,6 +311,7 @@ export default function CheckList() {
                     >
                     + Press here to add task
                     </button>
+                    
                     {modal && (
                     <AddTaskButton
                         firstName={firstName}
@@ -291,6 +354,13 @@ export default function CheckList() {
                 >
                 + Press here to add task
                 </button>
+                <button 
+                    className="bg-white border-black border px-10 py-2 rounded ml-4"
+                    onClick={() => generateCareNote(selectedDate)}
+                >
+                    Generate Care Note
+                </button>
+
                 {modal && (
                 <AddTaskButton
                     firstName={firstName}
@@ -358,12 +428,14 @@ export default function CheckList() {
                             onClick={() => openEditTaskForm(task.id)} // Replace with your edit function
                             className="text-blue-600 hover:text-blue-800 mr-2"
                         >
-                            Edit
+                            Edit or Add Comment
 
                         </button>
                         
                         {editFormVisibility[task.id] && (
                             <EditTaskButton
+                            currentCompleteionStatus = {task.completed}
+                            taskComment = {task.comments}
                             taskID = {task.id}
                             task={task.task}
                             firstName= {firstName}

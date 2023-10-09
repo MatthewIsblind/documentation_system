@@ -5,9 +5,9 @@ import { format, parse } from 'date-fns'; // Import date-fns functions
 
 // Define your navigation links
 const navigation = [
-  { name: 'Home', to: '/' },
-  { name: 'Info Table', to: '/infoTable' },
-  { name: 'Hand Over', to: '/handOver' },
+  // { name: 'Home', to: '/' },
+  // { name: 'Info Table', to: '/infoTable' },
+  // { name: 'Hand Over', to: '/handOver' },
   { name: 'Create Patient', to: '/UpdatePatientInfo' },
   { name: 'Patient Dashboard', to: '/PatientDashboard' },
 ];

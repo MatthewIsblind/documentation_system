@@ -146,20 +146,22 @@ const PatientDashboard: React.FC = () => {
                           firstName: patient.patientFirstName,
                           lastName: patient.patientLastName,
                         }}
-                        className="text-green-600 hover:text-green-900 px-3"
+                        className="text-green-600 hover:text-red-500 px-3 border border-green-600 hover:border-red-500 py-1 rounded mr-2"
                       >
                         Open Profile
                       </Link>
+                      
                       <Link
                         to={`/checklist`}
                         state={{
                           firstName: patient.patientFirstName,
                           lastName: patient.patientLastName,
                         }}
-                        className="text-green-600 hover:text-green-900 px-3"
+                        className="text-green-600 hover:text-red-500 px-3 border border-green-600 hover:border-red-500 py-1 rounded ml-1"
                       >
                         Check Task List
                       </Link>
+                      
                     </td>
                   </tr>
                 ))}

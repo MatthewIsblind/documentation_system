@@ -32,6 +32,22 @@ function App() {
       }
     }, [location]); 
 
+    // Handle the window unload event to set isLoggedIn to false
+    useEffect(() => {
+      const handleUnload = (e : BeforeUnloadEvent) => {
+        // Set isLoggedIn to false in localStorage when the window is closed
+        localStorage.setItem('isLoggedIn', 'false');
+      };
+
+      // Attach the event listener
+      window.addEventListener('unload', handleUnload);
+
+      // Remove the event listener when the component is unmounted
+      return () => {
+        window.removeEventListener('unload', handleUnload);
+      };
+    }, []);
+
 
     return (
       <div className="h-screen flex flex-col">
@@ -45,7 +61,7 @@ function App() {
                 <Route path="/Handover" element={isLoggedIn ? <Handover /> : <Navigate to="/login" />} />
                 <Route path="/login" element={<LoginPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  userName={userName} setUserName={setUserName}/>} />
                 <Route path="/UpdatePatientInfo" element={isLoggedIn ? <UpdatePatientInfo /> : <Navigate to="/login" />} />
-                <Route path="/CheckList" element={isLoggedIn ? <CheckList /> : <Navigate to="/login" />} />
+                <Route path="/CheckList" element={isLoggedIn ? <CheckList username={userName} /> : <Navigate to="/login" />} />
                 <Route path="/PatientDashBoard" element={isLoggedIn ? <PatientDashboard /> : <Navigate to="/login" />} />
                 <Route path="/PatientProfile" element={isLoggedIn ? <PatientProfile userName={userName} /> : <Navigate to="/login" />} />
               </Routes>

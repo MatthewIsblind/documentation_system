@@ -83,7 +83,7 @@ const UpdatePatientInfo: React.FC = () => {
   
   return(
             <div className='flex-grow'>
-                <h1>This is for updating the patient info</h1>
+                
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className=" border-b border-gray-900/10 pb-12 px-5 h-full overflow-y-auto">
                         <h1 className="text-3xl font-semibold leading-7 text-gray-900">Personal Information</h1>
@@ -202,8 +202,9 @@ const UpdatePatientInfo: React.FC = () => {
                         </div>
                         
                     </div>
-                    
-                    <button type="submit">Submit</button>
+                    <div className='item-center justify-center'>
+                    <button type="submit" className='items-center class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded'>Submit</button>
+                    </div>
                     <DevTool control={control} />
                 </form>
             </div>
