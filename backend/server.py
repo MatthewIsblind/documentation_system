@@ -324,6 +324,40 @@ def get_past_care_notes():
     else:
         return jsonify({'error': f'Patient {patient_name} not found'}), 404
 
+@app.route('/api/edit_existing_task', methods=['POST'])
+def edit_existing_task():
+    print("editing existing data")
+    try:
+        data = request.json
+        task_id = data['taskID']
+        patient_name = data['patientName']
+        task_date = data['taskDate']
+        comments = data.get('comments', '')  # Use data.get() to get comments as an optional field
+
+        print(data)
+        # Find the patient document by patient name
+        collection = mongo.db.tasklist
+        patient = collection.find_one({'name': patient_name})
+        print(patient)
+        if patient:
+            # Check if the task date exists in the patientTaskList
+            if task_date in patient['patientTaskList']:
+                tasks = patient['patientTaskList'][task_date]
+
+                # Find the task to update based on task_id
+                for task in tasks:
+                    if task['id'] == task_id:
+                        # Update the task and comments
+                        task['comments'] = comments  
+                        # Save the updated patient document back to the database
+                        collection.update_one({'name': patient_name}, {'$set': {'patientTaskList': patient['patientTaskList']}})
+                        return jsonify({'message': 'Task updated successfully'}), 200
+
+        return jsonify({'message': 'Patient or task not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 
 

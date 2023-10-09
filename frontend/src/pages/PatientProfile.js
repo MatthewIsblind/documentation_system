@@ -237,24 +237,21 @@ function PatientProfile(userName) {
                   </div>
                   {selectedDate && pastCareNotes.length > 0 ? (
                     <div>
-                      
-                        {pastCareNotes.map((note, index) => (
-                          <li key="{index}">
-                            <p>
-                              <strong>Time:</strong> {note.time}
-                            </p>
-                            <p>
-                              <strong>Username:</strong> {note.username}
-                              
-                            </p>
-
-                            <div>
-                              <textarea className=" border-gray-300 rounded-md p-2 w-full h-40 " readOnly value={note.note} />
-                            </div>
-                          </li>
-                        ))}
-                      
-                    </div>
+                    {pastCareNotes.map((note, index) => (
+                      <div key={index}>
+                        <p>
+                          <strong>Time:</strong> {note.time}
+                        </p>
+                        <p>
+                          <strong>Username:</strong> {note.username}
+                        </p>
+                        <div>
+                          <textarea className="border border-gray-300 rounded-md p-2 w-full h-40" readOnly value={note.note} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>                  
+                  
                   ) : (
                     <p>Select a date to view past care notes.</p>
                   )}

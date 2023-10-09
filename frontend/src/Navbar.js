@@ -6,10 +6,10 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 
 const navigation = [
   { name: 'Home', to: '/' },
-  { name: 'infoTable', to: '/infoTable' },
-  { name: 'handOver', to: '/handOver' },
+  // { name: 'infoTable', to: '/infoTable' },
+  // { name: 'handOver', to: '/handOver' },
   { name: 'Create Patient', to: '/UpdatePatientInfo' },
-  { name: 'PatientDashboard', to: '/PatientDashboard' }
+  { name: 'Patient Dashboard', to: '/PatientDashboard' }
 ];
 
 function classNames(...classes) {

@@ -61,7 +61,7 @@ function App() {
                 <Route path="/Handover" element={isLoggedIn ? <Handover /> : <Navigate to="/login" />} />
                 <Route path="/login" element={<LoginPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  userName={userName} setUserName={setUserName}/>} />
                 <Route path="/UpdatePatientInfo" element={isLoggedIn ? <UpdatePatientInfo /> : <Navigate to="/login" />} />
-                <Route path="/CheckList" element={isLoggedIn ? <CheckList /> : <Navigate to="/login" />} />
+                <Route path="/CheckList" element={isLoggedIn ? <CheckList username={userName} /> : <Navigate to="/login" />} />
                 <Route path="/PatientDashBoard" element={isLoggedIn ? <PatientDashboard /> : <Navigate to="/login" />} />
                 <Route path="/PatientProfile" element={isLoggedIn ? <PatientProfile userName={userName} /> : <Navigate to="/login" />} />
               </Routes>
