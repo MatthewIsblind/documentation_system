@@ -361,6 +361,15 @@ export default function CheckList({ username }: { username: String }) {
                     Generate Care Note
                 </button>
 
+
+                <button 
+                    className="bg-white border-black border px-10 py-2 rounded ml-4"
+                    onClick={() => generateCareNote(selectedDate)}
+                >
+                    Open Patient Profile
+                </button>
+
+
                 {modal && (
                 <AddTaskButton
                     firstName={firstName}
