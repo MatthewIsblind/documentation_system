@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; // Import the CSS
@@ -138,14 +139,28 @@ function PatientProfile(userName) {
 
           </div>
 
-        <div className="py-2">
-            <button 
+          <div className="py-2">
+            <div className="flex space-x-4">
+              <button 
                 onClick={() => setTableVisible(!isTableVisible)}
                 className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md"
-            >
+              >
                 {isTableVisible ? 'Hide Table' : 'Show Table'}
-            </button>
-        </div>
+              </button>
+              
+              <Link
+                to={`/checklist`}
+                state={{
+                  firstName: firstName,
+                  lastName: lastName,
+                }}
+                className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md"
+              >
+                Open Patient Task List
+              </Link>
+            </div>
+          </div>
+
         
           <div className={`overflow-x-auto ${isTableVisible ? 'block' : 'hidden'}`}>
             <table className="min-w-full divide-y divide-gray-200">
