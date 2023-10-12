@@ -84,10 +84,10 @@ function PatientProfile(userName) {
 
   const handleDisplayPastCareNotes = () => {
     setShowAddNotes(false)
-    handleSelectDate(pastCareNotesDate || new Date()); // Use pastCareNotesDate if available, otherwise use the current date
+    handlePastCareNoteDate(pastCareNotesDate || new Date()); // Use pastCareNotesDate if available, otherwise use the current date
   };
 
-  const handleSelectDate = (date) => {
+  const handlePastCareNoteDate = (date) => {
     setSelectedDate(date); // Update the selectedDate when a date is picked
      // Make an API request to retrieve past care notes
 
@@ -95,13 +95,16 @@ function PatientProfile(userName) {
      
     const formattedDate = date.toLocaleDateString() // Format the date as needed
     const patientName = formatFieldName(patientData.patientFirstName) + ' ' + formatFieldName(patientData.patientLastName);
-    console.log(formattedDate)
+    console.log(formattedDate + " sending the the request and reciving the notes")
     axios
       .get(`http://localhost:5000/api/get_past_care_notes?patientName=${patientName}&date=${formattedDate}`)
       .then((response) => {
         // Handle the response data here
+        console.log(response)
         if ('error' in response.data) {
+          
           console.log('Error retrieving past care notes:', response.data.error);
+          setpastCareNotes("") 
         } else {
           console.log('Past care notes received:', response.data);
           setpastCareNotes(response.data); // Update state with past care notes
@@ -231,8 +234,14 @@ function PatientProfile(userName) {
                   <div className="flex items-center mb-4">
                     <DatePicker
                       selected={pastCareNotesDate}
-                      onChange={(date) => setPastCareNotesDate(date)}
+                      onChange={(date) => {
+                        setPastCareNotesDate(date);
+                        handlePastCareNoteDate(date); // Call handlePastCareNoteDate when the date changes
+                      }}
                       dateFormat="dd/MM/yyyy"
+                      onClick={() => {
+                        setPastCareNotesDate(null); // Reset the date when clicking on the date picker
+                      }}
                     />
                   </div>
                   {selectedDate && pastCareNotes.length > 0 ? (

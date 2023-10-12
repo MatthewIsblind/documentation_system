@@ -18,13 +18,16 @@ interface Patient {
   
 }
 
+//api 6zf5lGVdZRRHKQKbGK0DYDpqTrh0yXQhOcHFsMLDTWagLPoRlH25gJ7AnydDHcQu
 const PatientDashboard: React.FC = () => {
 
   const [patient, setPatient] = React.useState<Patient[]>([]);
   const [searchTerm, setSearchTerm] = React.useState<string>(''); // State for the search term
 
   useEffect(() => {
+    console.log("trying to acess mongo online ")
     // Fetch data from the backend endpoint using axios
+    // axios.get('mongodb+srv://matet2501:heihei2501@cluster0.mfdvoch.mongodb.net/test')
     axios.get('http://localhost:5000/api/get_patients')
       .then((response) => {
         const data = response.data;

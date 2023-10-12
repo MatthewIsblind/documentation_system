@@ -8,7 +8,13 @@ from flask_cors import CORS  # Import CORS from flask_cors
 
 app = Flask(__name__)
 CORS(app) 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/testing"
+
+# app.config["MONGO_URI"] = "mongodb://localhost:27017/testing"
+# mongo = PyMongo(app)
+
+# Update your MongoDB URI with your MongoDB Atlas connection string
+# Replace the placeholder with your actual connection string
+app.config["MONGO_URI"] = "mongodb+srv://matet2501:heihei2501@cluster0.mfdvoch.mongodb.net/testing?retryWrites=true&w=majority"
 mongo = PyMongo(app)
 
 
@@ -49,9 +55,10 @@ def create_patient():
 
 @app.route('/api/get_patients', methods=['GET'])
 def get_patients():
+    print("get Patient")
     # Fetch all patient records from the "patient" collection
     patients = list(mongo.db.patients.find({}, {"_id": 0}))  # Exclude "_id" field from the response
-    print("get Patient")
+    
     return jsonify({"data": patients})
 
 
@@ -309,7 +316,7 @@ def get_past_care_notes():
 
     # Find the patient by name
     patient = care_notes_collection.find_one({'patient_name': patient_name})
-    print(patient)
+    # print(patient)
 
     if patient:
         # Retrieve the care notes for the specified date
@@ -318,9 +325,9 @@ def get_past_care_notes():
         
         if care_notes_for_date:
             # Return the care notes for the specified date
-            return jsonify(care_notes_for_date)
+            return jsonify(care_notes_for_date) , 200
         else:
-            return jsonify({'error': f'No care notes found for {patient_name} on {date}'}), 404
+            return jsonify({'error': f'No care notes found for {patient_name} on {date}'}), 200
     else:
         return jsonify({'error': f'Patient {patient_name} not found'}), 404
 
