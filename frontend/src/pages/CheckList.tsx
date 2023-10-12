@@ -1,11 +1,12 @@
 import React, { useState,useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation,Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns'; // Import the format function
 import AddTaskButton from './AddTaskutton';
 import axios from 'axios'; // Import axios at the beginning of your file
 import EditTaskButton from './EditTaskButton';
+
 
 interface Task {
     id: number;
@@ -304,7 +305,7 @@ export default function CheckList({ username }: { username: String }) {
                     />
                 </div>
 
-                <div>
+                <div className="flex flex-wrap gap-4 justify-start">
                     <button
                     className="bg-white border-black border px-10 py-2 rounded"
                     onClick={toggleModal}
@@ -312,6 +313,17 @@ export default function CheckList({ username }: { username: String }) {
                     + Press here to add task
                     </button>
                     
+                    <Link
+                    to={`/PatientProfile`}
+                    state={{
+                        firstName: firstName,
+                        lastName: lastName,
+                    }}
+                    className="bg-white border-black border px-10 py-2 rounded ml-4"
+                    >
+                    Open Profile
+                    </Link>
+
                     {modal && (
                     <AddTaskButton
                         firstName={firstName}
@@ -347,13 +359,29 @@ export default function CheckList({ username }: { username: String }) {
                 />
             </div>
 
-            <div>
+            <div className="flex flex-wrap gap-4 justify-start">
                 <button
                 className="bg-white border-black border px-10 py-2 rounded"
                 onClick={toggleModal}
                 >
                 + Press here to add task
                 </button>
+                
+
+
+                
+                <Link
+                    to={`/PatientProfile`}
+                    state={{
+                        firstName: firstName,
+                        lastName: lastName,
+                    }}
+                    className="bg-white border-black border px-10 py-2 rounded ml-4"
+                    >
+                    Open Profile
+                </Link>
+
+
                 <button 
                     className="bg-white border-black border px-10 py-2 rounded ml-4"
                     onClick={() => generateCareNote(selectedDate)}
@@ -362,12 +390,6 @@ export default function CheckList({ username }: { username: String }) {
                 </button>
 
 
-                <button 
-                    className="bg-white border-black border px-10 py-2 rounded ml-4"
-                    onClick={() => generateCareNote(selectedDate)}
-                >
-                    Open Patient Profile
-                </button>
 
 
                 {modal && (
