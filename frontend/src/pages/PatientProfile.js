@@ -32,7 +32,7 @@ function PatientProfile(userName) {
     console.log(firstName);
     console.log(lastName);
     axios
-      .get(`http://localhost:5000/api/get_patient_info?firstName=${firstName}&lastName=${lastName}`)
+      .get(`https://rich-aspect-401900.ts.r.appspot.com/api/get_patient_info?firstName=${firstName}&lastName=${lastName}`)
       .then((response) => {
         // Handle the response data here
         if ('error' in response.data) {
@@ -68,7 +68,7 @@ function PatientProfile(userName) {
       console.log(requestData)
       // Send a POST request to your API
       axios
-        .post('http://localhost:5000/api/add_care_note', requestData)
+        .post('https://rich-aspect-401900.ts.r.appspot.com/api/add_care_note', requestData)
         .then((response) => {
           // Handle the response from the server, e.g., show a success message
           console.log('Care note saved successfully');
@@ -98,7 +98,7 @@ function PatientProfile(userName) {
     const patientName = formatFieldName(patientData.patientFirstName) + ' ' + formatFieldName(patientData.patientLastName);
     console.log(formattedDate + " sending the the request and reciving the notes")
     axios
-      .get(`http://localhost:5000/api/get_past_care_notes?patientName=${patientName}&date=${formattedDate}`)
+      .get(`https://rich-aspect-401900.ts.r.appspot.com/api/get_past_care_notes?patientName=${patientName}&date=${formattedDate}`)
       .then((response) => {
         // Handle the response data here
         console.log(response)

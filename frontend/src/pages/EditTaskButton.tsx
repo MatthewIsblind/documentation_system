@@ -115,7 +115,7 @@ const EditTaskButton: React.FC<Props> = ({
             };
 
 
-            const response = await axios.post('http://localhost:5000/api/edit_existing_task', requestBody);
+            const response = await axios.post('https://rich-aspect-401900.ts.r.appspot.com/api/edit_existing_task', requestBody);
 
             if (response.status === 200) {
                 // Task updated successfully on the server

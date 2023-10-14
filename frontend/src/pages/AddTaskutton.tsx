@@ -66,7 +66,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
         const fetchTaskOptions = async () => {
           try {
             // Make a GET request to your backend API to fetch task options
-            const response = await axios.get('http://localhost:5000/api/get_task_options');
+            const response = await axios.get('https://rich-aspect-401900.ts.r.appspot.com/api/get_task_options');
             
             if (response.status === 200) {
               // Task options fetched successfully
@@ -129,7 +129,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
 
         try {
             // Make a POST request to your backend API
-            const response = await axios.post('http://localhost:5000/api/add_task', requestBody);
+            const response = await axios.post('https://rich-aspect-401900.ts.r.appspot.com/api/add_task', requestBody);
             
             if (response.status === 200) {
               // Task added successfully on the server
