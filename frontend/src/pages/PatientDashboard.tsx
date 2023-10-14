@@ -28,13 +28,20 @@ const PatientDashboard: React.FC = () => {
     console.log("trying to acess mongo online ")
     // Fetch data from the backend endpoint using axios
     // axios.get('mongodb+srv://matet2501:heihei2501@cluster0.mfdvoch.mongodb.net/test')
-    axios.get('http://localhost:5000/api/get_patients')
+    axios.get('https://rich-aspect-401900.ts.r.appspot.com/api/get_patients')
       .then((response) => {
         const data = response.data;
         if (data && data.data) {
           setPatient(data.data);
         }
         console.log(data);
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+
+
+      axios.get('https://rich-aspect-401900.ts.r.appspot.com/api/testing')
+      .then((response) => {
+        console.log(response);
       })
       .catch((error) => console.error('Error fetching data:', error));
   }, []);

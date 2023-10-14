@@ -18,7 +18,7 @@ const LoginPage: React.FC<Props> = ({ isLoggedIn, setIsLoggedIn,userName,setUser
 
     const handleLogin = () => {
       // Replace these dummy values with actual username and password
-      const dummyUsername = 'testing User';
+      const dummyUsername = 'testinguser';
       const dummyPassword = '123';
 
       // Get the values entered by the user

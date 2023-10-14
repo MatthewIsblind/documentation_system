@@ -97,7 +97,7 @@ export default function CheckList({ username }: { username: String }) {
         const formattedDate = format(date, 'dd/MM/yyyy');
         
         try {
-            axios.get(`http://localhost:5000/api/get_tasks?date=${formattedDate}&firstName=${firstName}&lastName=${lastName}`)
+            axios.get(`https://rich-aspect-401900.ts.r.appspot.com/api/get_tasks?date=${formattedDate}&firstName=${firstName}&lastName=${lastName}`)
             .then((response) => {
                 // Handle the response data here
                 
@@ -171,7 +171,7 @@ export default function CheckList({ username }: { username: String }) {
 
         // Send a POST request to your API
         axios
-        .post('http://localhost:5000/api/add_care_note', requestData)
+        .post('https://rich-aspect-401900.ts.r.appspot.com/api/add_care_note', requestData)
         .then((response) => {
             // Handle the response from the server, e.g., show a success message
             console.log('Care note saved successfully');
@@ -231,7 +231,7 @@ export default function CheckList({ username }: { username: String }) {
 
                 } 
 
-                const response = await axios.post('http://localhost:5000/api/update_task', requestBody)
+                const response = await axios.post('https://rich-aspect-401900.ts.r.appspot.com/api/update_task', requestBody)
                 ;
                 if (response.status === 200) {
                     // Task updated successfully on the server
@@ -266,7 +266,7 @@ export default function CheckList({ username }: { username: String }) {
             } 
 
             try {
-                const response = await axios.post('http://localhost:5000/api/delete_task', requestBody);
+                const response = await axios.post('https://rich-aspect-401900.ts.r.appspot.com/api/delete_task', requestBody);
                 if (response.status === 200) {
                     console.error('task deleted:', response.data);
                     updateTasksToShow(selectedDate)
