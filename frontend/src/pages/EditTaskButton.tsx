@@ -1,9 +1,8 @@
 // EditTaskButton.tsx
-import React, { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
+import React, { useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format,parse } from 'date-fns';
-import { useForm,Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 interface Props {
@@ -98,25 +97,30 @@ const EditTaskButton: React.FC<Props> = ({
             const formattedTime = `${data.hour}:${data.minute}`; // Combine hour, minute
             console.log(data);
             console.log(taskID);
-
+            console.log(formattedTime);
+            
             const EditedTask = {
                 id :taskID,
                 time : formattedTime,
                 editedTask :data.task,
                 completed : currentCompleteionStatus,
             }
+            
+            
 
             const requestBody = {
                 patientName: `${firstName} ${lastName}`, // Combine first and last name
                 taskDate :selectedDate,
                 taskID: taskID,
-                editedTask : EditedTask,    
-                comments:data.comments
+                editedTask : data.task,    
+                comments:data.comments,
+                taskTime : formattedTime,
             };
 
-
+            // const response = await axios.post('http://localhost:5000/api/edit_existing_task', requestBody);
             const response = await axios.post('https://rich-aspect-401900.ts.r.appspot.com/api/edit_existing_task', requestBody);
-
+            console.log(requestBody)
+            
             if (response.status === 200) {
                 // Task updated successfully on the server
                 console.log(response)
@@ -137,9 +141,9 @@ const EditTaskButton: React.FC<Props> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white p-4 rounded-lg shadow-lg w-96">
+        <div className="bg-white p-4 rounded-lg shadow-lg w-96 max-w-full">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">
+                <h2 className="text-base font-semibold">
                     Edit Task for {firstName} {lastName} on {selectedDate}
                 </h2>
                 <button
@@ -155,7 +159,8 @@ const EditTaskButton: React.FC<Props> = ({
                         Task Name
                     </label>
                     <div className="mt-2 py-5">
-                        <input type="text" {...register("task",{ required: 'Please fill in task' })} id="task" autoComplete="task" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <input type="text" {...register("task",{ required: 'Please fill in task' })} id="task" autoComplete="task" 
+                        className="block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                         {errors.task && (
                             <span className="text-red-500">{errors.task.message}</span>
                         )}
@@ -167,14 +172,14 @@ const EditTaskButton: React.FC<Props> = ({
                     <label className="block text-sm font-medium text-gray-700">Time (24 hour)</label>
                     <div className="flex items-center">
                     <div className="mt-2 py-5">
-                        <input type="text" {...register("hour",{ required: 'Please fill in the hour' })} id="hour" autoComplete="hour" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <input type="text" {...register("hour",{ required: 'Please fill in the hour' })} id="hour" autoComplete="hour" className="block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                         {errors.hour && (
                             <span className="text-red-500">{errors.hour.message}</span>
                         )}
                     </div>
                         <span className="text-xl"> : </span>
                     <div className="mt-2 py-5">
-                        <input type="minute" {...register("minute",{ required: 'Please fill in the minute' })} id="minute" autoComplete="minute" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <input type="minute" {...register("minute",{ required: 'Please fill in the minute' })} id="minute" autoComplete="minute" className="block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                         {errors.minute && (
                             <span className="text-red-500">{errors.minute.message}</span>
                         )}
@@ -192,7 +197,7 @@ const EditTaskButton: React.FC<Props> = ({
                             {...register("comments")}
                             id="comments"
                             autoComplete="comments"
-                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             
                         />
                     </div>
