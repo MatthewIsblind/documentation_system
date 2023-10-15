@@ -352,7 +352,7 @@ def edit_existing_task():
         patient = collection.find_one({'name': patient_name})
         print(patient)
         if patient:
-            # Check if the task date exists in the patientTaskList
+            # Check if the task date exists in the patientaskList
             if task_date in patient['patientTaskList']:
                 tasks = patient['patientTaskList'][task_date]
 
@@ -360,6 +360,8 @@ def edit_existing_task():
                 for task in tasks:
                     if task['id'] == task_id:
                         # Update the task and comments
+                        task['task'] = data['editedTask']
+                        task['time'] = data['taskTime']
                         task['comments'] = comments  
                         # Save the updated patient document back to the database
                         collection.update_one({'name': patient_name}, {'$set': {'patientTaskList': patient['patientTaskList']}})

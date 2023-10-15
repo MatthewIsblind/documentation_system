@@ -107,7 +107,7 @@ export default function CheckList({ username }: { username: String }) {
                     setTasksToShow([]);
                 } else {
                     const sortedTasks = sortTasksByTime(response.data.tasks)
-                    console.log(sortedTasks);
+                    
                     setTasksToShow(sortedTasks);
                 }
                 
@@ -154,10 +154,9 @@ export default function CheckList({ username }: { username: String }) {
     const generateCareNote = (date: Date) => {
         const formattedDate = format(date, 'dd/MM/yyyy');
         console.log("Generating Care Note for date:", formattedDate);
-        console.log(tasksToShow);
+        
         const formattedSentence = formatTaskAsSentence(tasksToShow);
-        console.log(formattedSentence);
-        console.log(username)
+        
         // You can implement the logic to generate the care note here
         console.log(formatFieldName(firstName) + ' ' + formatFieldName(lastName))
         const requestData = {
@@ -219,7 +218,10 @@ export default function CheckList({ username }: { username: String }) {
                 return task;
             });
             updateTaskOnServer(taskId);
-            setTasksToShow(updatedTasks);
+            const updatedSorted = sortTasksByTime(updatedTasks)
+            console.log("sorted")
+            console.log(updatedSorted)
+            setTasksToShow(updatedSorted);
         };
 
         const updateTaskOnServer = async (taskId: number) => {
@@ -252,7 +254,7 @@ export default function CheckList({ username }: { username: String }) {
         
 
         const handleDelete = async(selectedDateFormat:string, taskName:string,taskTime:string) => {
-            const isConfirmed = window.confirm("Are you sure you want to delete this task?");
+            const isConfirmed = window.confirm("Are you sure you want to delete the task : " + taskName + "?");
 
             if (!isConfirmed) {
                 // User canceled the deletion
@@ -435,7 +437,7 @@ export default function CheckList({ username }: { username: String }) {
                 </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-                {tasksToShow.length > 0 && tasksToShow.map((task) => (
+                {tasksToShow.length > 0 && sortTasksByTime(tasksToShow).map((task) => (
                     <tr key={task.id}>
                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0 w-3/6">
                             <div className="font-medium text-gray-900 px-5">

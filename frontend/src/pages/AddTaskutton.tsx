@@ -177,7 +177,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
                 <input
                     type="text"
                     placeholder="Filter tasks..."
-                    className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     onChange={(e) => handleFilterChange(e.target.value)}
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -202,7 +202,7 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
                 </div>
                 </div>
 
-                    <select {...register("task", { required: 'Please select a task' })} className=" block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <select {...register("task", { required: 'Please select a task' })} className=" block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         <option value="">Select a task</option>
                         {taskOptions
                             .filter((option) =>
@@ -224,14 +224,14 @@ const AddTaskButton: React.FC<Props> = ({ firstName,lastName,selectedDate ,taskL
                       <label className="block text-sm font-medium text-gray-700 py-2">Time (24 hour)</label>
                       <div className="flex items-center">
                         <div className="mt-2 py-3">
-                            <input type="text" {...register("hour",{ required: 'Please fill in the hour' })} id="roomNumber" autoComplete="roomNumber" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            <input type="text" {...register("hour",{ required: 'Please fill in the hour' })} id="roomNumber" autoComplete="roomNumber" className="block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                             {errors.hour && (
                                 <span className="text-red-500">{errors.hour.message}</span>
                             )}
                         </div>
                           <span className="text-xl"> : </span>
                         <div className="mt-2 py-3">
-                          <input type="minute" {...register("minute",{ required: 'Please fill in the minute' })} id="roomNumber" autoComplete="roomNumber" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                          <input type="minute" {...register("minute",{ required: 'Please fill in the minute' })} id="roomNumber" autoComplete="roomNumber" className="block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                           {errors.minute && (
                               <span className="text-red-500">{errors.minute.message}</span>
                           )}
