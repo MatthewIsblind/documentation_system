@@ -142,16 +142,17 @@ const EditTaskButton: React.FC<Props> = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
         <div className="bg-white p-4 rounded-lg shadow-lg w-96 max-w-full">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-base font-semibold">
-                    Edit Task for {firstName} {lastName} on {selectedDate}
-                </h2>
                 <button
                     className="text-gray-500 hover:text-gray-700"
                     onClick={() => onClose(taskID)} 
                 >
-                    Close
+                    Close 
                 </button>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base font-semibold">
+                    Edit Task for {firstName} {lastName} on {selectedDate}
+                </h2>
+                
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-4">
